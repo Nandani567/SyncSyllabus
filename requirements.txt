@@ -1,0 +1,6 @@
+pip install pandas scikit-learn nltk matplotlib streamlit
+
+add job data file & syllabus csv file 
+
+
+MACHINELEARNING algo.
