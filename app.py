@@ -11,24 +11,13 @@ import nltk
 import os
 
 # -----------------------------
-# Setup local NLTK data directory (Windows-safe)
+# Download NLTK data at runtime (Streamlit-safe)
 # -----------------------------
-nltk_data_dir = os.path.join(os.getcwd(), "nltk_data")
-os.makedirs(nltk_data_dir, exist_ok=True)
-
-# Download punkt and stopwords if not already present
-try:
-    nltk.data.find('tokenizers/punkt')
-except LookupError:
-    nltk.download('punkt', download_dir=nltk_data_dir, quiet=True)
-
-try:
-    nltk.data.find('corpora/stopwords')
-except LookupError:
-    nltk.download('stopwords', download_dir=nltk_data_dir, quiet=True)
-
-# Add local nltk_data to path
-nltk.data.path.append(nltk_data_dir)
+for pkg in ["punkt", "stopwords"]:
+    try:
+        nltk.data.find(f"tokenizers/{pkg}" if pkg == "punkt" else f"corpora/{pkg}")
+    except LookupError:
+        nltk.download(pkg, quiet=True)
 
 # -----------------------------
 # Text cleaning function
@@ -38,11 +27,10 @@ def clean(text):
     text = text.translate(str.maketrans('', '', string.punctuation))
     words = word_tokenize(text)
     stop_words = set(stopwords.words('english'))
-    filtered = [w for w in words if w not in stop_words]
-    return ' '.join(filtered)
+    return ' '.join([w for w in words if w not in stop_words])
 
 # -----------------------------
-# Default example CSV data
+# Default CSV data
 # -----------------------------
 default_syllabus = pd.DataFrame({
     "Subject": ["Data Structures", "Web Development", "Machine Learning",
@@ -76,11 +64,9 @@ default_jobs = pd.DataFrame({
 st.title("Dynamic Syllabus vs Industry Analyzer")
 st.markdown("Upload your **Syllabus** and **Job CSV** to analyze alignment, or use the default example data.")
 
-# File uploads
 syllabus_file = st.file_uploader("Upload Syllabus CSV", type=["csv"])
 job_file = st.file_uploader("Upload Job Descriptions CSV", type=["csv"])
 
-# Use uploaded CSVs if provided, otherwise default
 syllabus_df = pd.read_csv(syllabus_file) if syllabus_file else default_syllabus
 job_df = pd.read_csv(job_file) if job_file else default_jobs
 
