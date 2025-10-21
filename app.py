@@ -11,13 +11,27 @@ import nltk
 import os
 
 # -----------------------------
-# Download NLTK data at runtime (Streamlit-safe)
+# Use local nltk_data folder in repo
 # -----------------------------
-for pkg in ["punkt", "stopwords"]:
-    try:
-        nltk.data.find(f"tokenizers/{pkg}" if pkg == "punkt" else f"corpora/{pkg}")
-    except LookupError:
-        nltk.download(pkg, quiet=True)
+nltk_data_dir = os.path.join(os.path.dirname(__file__), "nltk_data")
+if not os.path.exists(nltk_data_dir):
+    os.makedirs(nltk_data_dir)
+
+# Add nltk_data folder to NLTK's search path
+nltk.data.path.append(nltk_data_dir)
+
+# -----------------------------
+# Ensure punkt and stopwords are available locally
+# -----------------------------
+try:
+    nltk.data.find('tokenizers/punkt')
+except LookupError:
+    nltk.download('punkt', download_dir=nltk_data_dir, quiet=True)
+
+try:
+    nltk.data.find('corpora/stopwords')
+except LookupError:
+    nltk.download('stopwords', download_dir=nltk_data_dir, quiet=True)
 
 # -----------------------------
 # Text cleaning function
@@ -27,7 +41,8 @@ def clean(text):
     text = text.translate(str.maketrans('', '', string.punctuation))
     words = word_tokenize(text)
     stop_words = set(stopwords.words('english'))
-    return ' '.join([w for w in words if w not in stop_words])
+    filtered = [w for w in words if w not in stop_words]
+    return ' '.join(filtered)
 
 # -----------------------------
 # Default CSV data
