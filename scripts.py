@@ -1,7 +1,6 @@
+
 import nltk
-nltk.download('stopwords')
-nltk.download('punkt_tab')
 nltk.download('punkt')
+nltk.download('stopwords')
 from nltk.corpus import stopwords
 print(stopwords.words('english'))
-

@@ -9,9 +9,8 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-# Step 1: Load CSV files
-syllabus_df = pd.read_csv(r'C:\Users\ASUS\Downloads\syllabus.csv')
-job_df = pd.read_csv(r'C:\Users\ASUS\Downloads\job_data.csv')
+syllabus_df = pd.read_csv('syllabus.csv')
+job_df = pd.read_csv('job_data.csv')
 
 
 print("Syllabus CSV Columns:", syllabus_df.columns)

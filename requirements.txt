@@ -4,3 +4,12 @@ add job data file & syllabus csv file
 
 
 MACHINELEARNING algo.
+
+
+streamlit
+pandas
+scikit-learn
+sentence-transformers
+matplotlib
+seaborn
+nltk
