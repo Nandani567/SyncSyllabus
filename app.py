@@ -10,6 +10,10 @@ import matplotlib.pyplot as plt
 import nltk
 import os
 
+
+nltk_data_dir = os.path.join(os.path.dirname(__file__), "nltk_data")
+nltk.data.path.append(nltk_data_dir)
+
 # -----------------------------
 # Use local nltk_data folder in repo
 # -----------------------------
