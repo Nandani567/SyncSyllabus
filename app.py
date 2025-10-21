@@ -27,6 +27,9 @@ try:
 except LookupError:
     nltk.download('stopwords', download_dir=nltk_data_dir, quiet=True)
 
+# Add local nltk_data to path
+nltk.data.path.append(nltk_data_dir)
+
 # -----------------------------
 # Text cleaning function
 # -----------------------------
@@ -78,17 +81,8 @@ syllabus_file = st.file_uploader("Upload Syllabus CSV", type=["csv"])
 job_file = st.file_uploader("Upload Job Descriptions CSV", type=["csv"])
 
 # Use uploaded CSVs if provided, otherwise default
-if syllabus_file is not None:
-    syllabus_df = pd.read_csv(syllabus_file)
-else:
-    st.info("No syllabus file uploaded — using default example syllabus.")
-    syllabus_df = default_syllabus
-
-if job_file is not None:
-    job_df = pd.read_csv(job_file)
-else:
-    st.info("No job file uploaded — using default example jobs.")
-    job_df = default_jobs
+syllabus_df = pd.read_csv(syllabus_file) if syllabus_file else default_syllabus
+job_df = pd.read_csv(job_file) if job_file else default_jobs
 
 # Validate necessary columns
 if 'Description' not in syllabus_df.columns or 'Description' not in job_df.columns:
