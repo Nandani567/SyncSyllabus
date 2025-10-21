@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 import string
@@ -9,12 +8,24 @@ from sklearn.metrics.pairwise import cosine_similarity
 import seaborn as sns
 import matplotlib.pyplot as plt
 import nltk
+import os
 
 # -----------------------------
-# Download NLTK data
+# Setup local NLTK data directory (Windows-safe)
 # -----------------------------
-nltk.download('punkt')
-nltk.download('stopwords')
+nltk_data_dir = os.path.join(os.getcwd(), "nltk_data")
+os.makedirs(nltk_data_dir, exist_ok=True)
+
+# Download punkt and stopwords if not already present
+try:
+    nltk.data.find('tokenizers/punkt')
+except LookupError:
+    nltk.download('punkt', download_dir=nltk_data_dir, quiet=True)
+
+try:
+    nltk.data.find('corpora/stopwords')
+except LookupError:
+    nltk.download('stopwords', download_dir=nltk_data_dir, quiet=True)
 
 # -----------------------------
 # Text cleaning function
