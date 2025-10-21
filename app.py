@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import string
 from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import seaborn as sns
@@ -10,27 +9,14 @@ import matplotlib.pyplot as plt
 import nltk
 import os
 
-
-nltk_data_dir = os.path.join(os.path.dirname(__file__), "nltk_data")
-nltk.data.path.append(nltk_data_dir)
-
 # -----------------------------
-# Use local nltk_data folder in repo
+# Ensure stopwords are available
 # -----------------------------
 nltk_data_dir = os.path.join(os.path.dirname(__file__), "nltk_data")
 if not os.path.exists(nltk_data_dir):
     os.makedirs(nltk_data_dir)
 
-# Add nltk_data folder to NLTK's search path
 nltk.data.path.append(nltk_data_dir)
-
-# -----------------------------
-# Ensure punkt and stopwords are available locally
-# -----------------------------
-try:
-    nltk.data.find('tokenizers/punkt')
-except LookupError:
-    nltk.download('punkt', download_dir=nltk_data_dir, quiet=True)
 
 try:
     nltk.data.find('corpora/stopwords')
@@ -38,15 +24,14 @@ except LookupError:
     nltk.download('stopwords', download_dir=nltk_data_dir, quiet=True)
 
 # -----------------------------
-# Text cleaning function
+# Text cleaning function (simple split, no NLTK tokenizer)
 # -----------------------------
 def clean(text):
     text = str(text).lower()
     text = text.translate(str.maketrans('', '', string.punctuation))
-    words = word_tokenize(text)
+    words = text.split()  # simple split instead of word_tokenize
     stop_words = set(stopwords.words('english'))
-    filtered = [w for w in words if w not in stop_words]
-    return ' '.join(filtered)
+    return ' '.join([w for w in words if w not in stop_words])
 
 # -----------------------------
 # Default CSV data
